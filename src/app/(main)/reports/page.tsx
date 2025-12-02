@@ -144,6 +144,18 @@ export default function ReportsPage() {
     return counts;
   }, [reports]);
 
+  // Get all reporters for a specific content
+  const getReportersForContent = (contentId: string) => {
+    return reports
+      .filter((r) => r.contentId === contentId)
+      .map((r) => ({
+        name: r.reporterName,
+        email: r.reporterEmail,
+        reason: r.reason,
+        date: r.reportedAt,
+      }));
+  };
+
   // Helper function to get priority based on flag count
   const getPriority = (contentId: string): "high" | "medium" | "low" => {
     const count = reportCountByContent[contentId] || 1;
@@ -602,22 +614,52 @@ export default function ReportsPage() {
                     {reasonLabels[viewDialog.report.reason]}
                   </Badge>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 col-span-2">
                   <h4 className="font-medium text-sm text-muted-foreground">
-                    Reported By
+                    Reported By (
+                    {getReportersForContent(viewDialog.report.contentId).length}{" "}
+                    user
+                    {getReportersForContent(viewDialog.report.contentId)
+                      .length > 1
+                      ? "s"
+                      : ""}
+                    )
                   </h4>
-                  <div>
-                    <p className="font-medium text-sm">
-                      {viewDialog.report.reporterName}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {viewDialog.report.reporterEmail}
-                    </p>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {getReportersForContent(viewDialog.report.contentId).map(
+                      (reporter, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-muted/50 p-2 rounded-lg"
+                        >
+                          <div>
+                            <p className="font-medium text-sm">
+                              {reporter.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {reporter.email}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <Badge
+                              className={`${
+                                reasonColors[reporter.reason]
+                              } text-xs`}
+                            >
+                              {reasonLabels[reporter.reason]}
+                            </Badge>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {reporter.date.toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 col-span-2">
                   <h4 className="font-medium text-sm text-muted-foreground">
-                    Report Date
+                    First Reported
                   </h4>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />

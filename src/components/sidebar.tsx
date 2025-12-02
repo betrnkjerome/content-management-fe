@@ -3,13 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, FileText, Shield, UserX, Flag } from "lucide-react";
+import {
+  LayoutDashboard,
+  FileText,
+  Shield,
+  UserX,
+  Flag,
+  Users,
+} from "lucide-react";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Content Queue", href: "/content", icon: FileText },
-  { name: "Reported Content", href: "/reports", icon: Flag },
-  { name: "Repeat Violators", href: "/violators", icon: UserX },
+  // { name: "Reported Content", href: "/reports", icon: Flag },
+  // { name: "Repeat Violators", href: "/violators", icon: UserX },
+  { name: "User Management", href: "/users", icon: Users },
 ];
 
 export function Sidebar() {
@@ -47,6 +55,12 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      <div className="border-t p-4">
+        <p className="text-xs text-muted-foreground text-center">
+          © {new Date().getFullYear()} Content Moderation. All rights reserved.
+        </p>
+      </div>
     </div>
   );
 }

@@ -2,8 +2,18 @@ import {
   ContentItem,
   ContentReport,
   ModerationStats,
+  ModeratorUser,
   Violator,
+  Website,
 } from "@/types/content";
+
+export const mockWebsites: Website[] = [
+  { id: "web_1", name: "TechReviews", url: "https://techreviews.com" },
+  { id: "web_2", name: "FoodieHub", url: "https://foodiehub.com" },
+  { id: "web_3", name: "TravelBlog", url: "https://travelblog.com" },
+  { id: "web_4", name: "FitnessFirst", url: "https://fitnessfirst.com" },
+  { id: "web_5", name: "GameZone", url: "https://gamezone.com" },
+];
 
 export const mockContent: ContentItem[] = [
   {
@@ -19,6 +29,7 @@ export const mockContent: ContentItem[] = [
     createdAt: new Date("2024-12-01T10:30:00"),
     status: "pending",
     flagCount: 0,
+    websiteId: "web_1",
   },
   {
     id: "2",
@@ -29,10 +40,23 @@ export const mockContent: ContentItem[] = [
     content:
       "This product is absolutely terrible! The company is a scam and they should be shut down immediately. DO NOT BUY!",
     rating: 1,
+    media: [
+      {
+        id: "m1",
+        type: "image",
+        url: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800",
+      },
+      {
+        id: "m2",
+        type: "image",
+        url: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800",
+      },
+    ],
     createdAt: new Date("2024-12-01T09:15:00"),
     status: "pending",
     flagCount: 3,
     reportReasons: ["Spam", "Misleading", "Harassment"],
+    websiteId: "web_2",
   },
   {
     id: "3",
@@ -48,34 +72,47 @@ export const mockContent: ContentItem[] = [
     status: "pending",
     flagCount: 5,
     reportReasons: ["Inappropriate image", "Offensive content"],
+    websiteId: "web_3",
   },
   {
     id: "4",
-    type: "comment",
+    type: "profile_picture",
     userId: "user_004",
     userName: "Emily Davis",
     userEmail: "emily.d@email.com",
-    content: "Great article! I really enjoyed reading this and learned a lot.",
+    content:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop",
+    thumbnail:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop",
     createdAt: new Date("2024-12-01T11:00:00"),
     status: "approved",
     flagCount: 0,
     moderatedAt: new Date("2024-12-01T11:30:00"),
     moderatedBy: "admin",
+    websiteId: "web_1",
   },
   {
     id: "5",
-    type: "post",
+    type: "review",
     userId: "user_005",
     userName: "Alex Thompson",
     userEmail: "alex.t@email.com",
-    title: "Check out my new photography!",
     content:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-    thumbnail:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+      "Decent product overall. Works as advertised but shipping took longer than expected. Check out the unboxing video!",
+    rating: 3,
+    media: [
+      {
+        id: "m3",
+        type: "video",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        thumbnail:
+          "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400",
+      },
+    ],
     createdAt: new Date("2024-12-01T07:30:00"),
     status: "pending",
     flagCount: 0,
+    websiteId: "web_4",
   },
   {
     id: "6",
@@ -84,21 +121,42 @@ export const mockContent: ContentItem[] = [
     userName: "Jessica Brown",
     userEmail: "jess.b@email.com",
     content:
-      "Excellent service! Fast shipping and great quality. Would definitely recommend to friends.",
+      "Excellent service! Fast shipping and great quality. Would definitely recommend to friends. Here are some photos of what I received!",
     rating: 5,
+    media: [
+      {
+        id: "m4",
+        type: "image",
+        url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800",
+      },
+      {
+        id: "m5",
+        type: "image",
+        url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
+      },
+      {
+        id: "m6",
+        type: "video",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        thumbnail:
+          "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400",
+      },
+    ],
     createdAt: new Date("2024-11-30T16:20:00"),
     status: "approved",
     flagCount: 0,
     moderatedAt: new Date("2024-11-30T17:00:00"),
     moderatedBy: "admin",
+    websiteId: "web_2",
   },
   {
     id: "7",
-    type: "comment",
+    type: "review",
     userId: "user_007",
     userName: "David Lee",
     userEmail: "david.l@email.com",
     content: "This is spam! Visit my website for free stuff!!!",
+    rating: 1,
     createdAt: new Date("2024-11-30T14:00:00"),
     status: "taken_down",
     flagCount: 8,
@@ -106,6 +164,7 @@ export const mockContent: ContentItem[] = [
     moderatedAt: new Date("2024-11-30T14:30:00"),
     moderatedBy: "admin",
     reason: "Spam content promoting external website",
+    websiteId: "web_5",
   },
   {
     id: "8",
@@ -121,6 +180,7 @@ export const mockContent: ContentItem[] = [
     status: "pending",
     flagCount: 1,
     reportReasons: ["Fake profile"],
+    websiteId: "web_3",
   },
 ];
 
@@ -146,12 +206,12 @@ export const mockViolators: Violator[] = [
     violationHistory: [
       {
         date: new Date("2024-11-30"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Spam content",
       },
       {
         date: new Date("2024-11-25"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Advertising",
       },
       {
@@ -161,12 +221,12 @@ export const mockViolators: Violator[] = [
       },
       {
         date: new Date("2024-11-10"),
-        contentType: "post",
+        contentType: "profile_picture",
         reason: "Misleading content",
       },
       {
         date: new Date("2024-10-05"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Harassment",
       },
     ],
@@ -191,7 +251,7 @@ export const mockViolators: Violator[] = [
       },
       {
         date: new Date("2024-11-28"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Hate speech",
       },
       {
@@ -201,11 +261,15 @@ export const mockViolators: Violator[] = [
       },
       {
         date: new Date("2024-11-15"),
-        contentType: "comment",
+        contentType: "profile_picture",
         reason: "Threats",
       },
-      { date: new Date("2024-11-01"), contentType: "post", reason: "Nudity" },
-      { date: new Date("2024-10-20"), contentType: "comment", reason: "Spam" },
+      {
+        date: new Date("2024-11-01"),
+        contentType: "profile_picture",
+        reason: "Nudity",
+      },
+      { date: new Date("2024-10-20"), contentType: "review", reason: "Spam" },
       {
         date: new Date("2024-10-10"),
         contentType: "review",
@@ -213,7 +277,7 @@ export const mockViolators: Violator[] = [
       },
       {
         date: new Date("2024-09-15"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Harassment",
       },
     ],
@@ -231,12 +295,12 @@ export const mockViolators: Violator[] = [
     violationHistory: [
       {
         date: new Date("2024-12-01"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Harassment",
       },
       {
         date: new Date("2024-11-30"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Hate speech",
       },
       {
@@ -246,7 +310,7 @@ export const mockViolators: Violator[] = [
       },
       {
         date: new Date("2024-11-25"),
-        contentType: "comment",
+        contentType: "review",
         reason: "Bullying",
       },
     ],
@@ -269,7 +333,7 @@ export const mockViolators: Violator[] = [
         contentType: "profile_picture",
         reason: "Inappropriate image",
       },
-      { date: new Date("2024-10-15"), contentType: "comment", reason: "Spam" },
+      { date: new Date("2024-10-15"), contentType: "review", reason: "Spam" },
       {
         date: new Date("2024-09-20"),
         contentType: "review",
@@ -288,9 +352,9 @@ export const mockViolators: Violator[] = [
     accountCreatedAt: new Date("2024-11-01T00:00:00"),
     penaltyStatus: "banned",
     violationHistory: [
-      { date: new Date("2024-11-28"), contentType: "comment", reason: "Spam" },
-      { date: new Date("2024-11-27"), contentType: "comment", reason: "Spam" },
-      { date: new Date("2024-11-26"), contentType: "comment", reason: "Spam" },
+      { date: new Date("2024-11-28"), contentType: "review", reason: "Spam" },
+      { date: new Date("2024-11-27"), contentType: "review", reason: "Spam" },
+      { date: new Date("2024-11-26"), contentType: "review", reason: "Spam" },
     ],
   },
 ];
@@ -333,7 +397,7 @@ export const mockReports: ContentReport[] = [
   {
     id: "r3",
     contentId: "7",
-    contentType: "comment",
+    contentType: "review",
     contentPreview: "This is spam! Visit my website for free stuff!!!",
     reporterId: "user_015",
     reporterName: "Emma Watson",
@@ -351,18 +415,17 @@ export const mockReports: ContentReport[] = [
   {
     id: "r4",
     contentId: "5",
-    contentType: "post",
-    contentPreview: "Check out my new photography!",
-    contentThumbnail:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+    contentType: "review",
+    contentPreview:
+      "Decent product overall. Works as advertised but shipping took longer than expected.",
     reporterId: "user_020",
     reporterName: "Tom Hardy",
     reporterEmail: "tom.h@email.com",
     targetUserId: "user_005",
     targetUserName: "Alex Thompson",
-    reason: "copyright",
+    reason: "other",
     description:
-      "This image appears to be stolen from a professional photographer.",
+      "This review seems to be from a competitor trying to downplay the product.",
     reportedAt: new Date("2024-12-01T10:00:00"),
     status: "pending",
   },
@@ -401,5 +464,74 @@ export const mockReports: ContentReport[] = [
     resolvedAt: new Date("2024-12-01T10:00:00"),
     resolvedBy: "Admin User",
     resolution: "no_action",
+  },
+];
+
+export const mockModeratorUsers: ModeratorUser[] = [
+  {
+    id: "mod_001",
+    name: "Admin User",
+    email: "admin@company.com",
+    role: "admin",
+    status: "active",
+    lastActive: new Date("2024-12-02T14:30:00"),
+    createdAt: new Date("2024-01-15T09:00:00"),
+    actionsCount: 1247,
+    assignedWebsites: ["web_1", "web_2", "web_3", "web_4", "web_5"],
+  },
+  {
+    id: "mod_002",
+    name: "Jessica Chen",
+    email: "jessica.chen@company.com",
+    role: "moderator",
+    status: "active",
+    lastActive: new Date("2024-12-02T13:45:00"),
+    createdAt: new Date("2024-03-20T10:00:00"),
+    actionsCount: 892,
+    assignedWebsites: ["web_1", "web_2"],
+  },
+  {
+    id: "mod_003",
+    name: "Marcus Thompson",
+    email: "marcus.t@company.com",
+    role: "moderator",
+    status: "active",
+    lastActive: new Date("2024-12-02T12:00:00"),
+    createdAt: new Date("2024-06-10T08:30:00"),
+    actionsCount: 456,
+    assignedWebsites: ["web_3", "web_4"],
+  },
+  {
+    id: "mod_004",
+    name: "Emily Rodriguez",
+    email: "emily.r@company.com",
+    role: "moderator",
+    status: "active",
+    lastActive: new Date("2024-12-01T16:20:00"),
+    createdAt: new Date("2024-07-05T11:00:00"),
+    actionsCount: 312,
+    assignedWebsites: ["web_5"],
+  },
+  {
+    id: "mod_005",
+    name: "Sarah Mitchell",
+    email: "sarah.m@company.com",
+    role: "moderator",
+    status: "inactive",
+    lastActive: new Date("2024-11-15T09:00:00"),
+    createdAt: new Date("2024-04-22T09:30:00"),
+    actionsCount: 678,
+    assignedWebsites: ["web_1", "web_3"],
+  },
+  {
+    id: "mod_006",
+    name: "James Wilson",
+    email: "james.w@company.com",
+    role: "moderator",
+    status: "suspended",
+    lastActive: new Date("2024-11-28T11:30:00"),
+    createdAt: new Date("2024-02-18T10:00:00"),
+    actionsCount: 1034,
+    assignedWebsites: ["web_2", "web_4", "web_5"],
   },
 ];

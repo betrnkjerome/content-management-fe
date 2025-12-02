@@ -13,19 +13,14 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertTriangle,
   ArrowRight,
   ImageIcon,
   Star,
-  MessageSquare,
-  FileText,
 } from "lucide-react";
 
 const typeIcons = {
   profile_picture: ImageIcon,
   review: Star,
-  comment: MessageSquare,
-  post: FileText,
 };
 
 export default function Dashboard() {
@@ -46,9 +41,7 @@ export default function Dashboard() {
       <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Pending Review
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">For Review</CardTitle>
             <Clock className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
@@ -76,19 +69,6 @@ export default function Dashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{mockStats.totalTakenDown}</div>
             <p className="text-xs text-muted-foreground">Content removed</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Flagged</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{mockStats.flaggedContent}</div>
-            <p className="text-xs text-muted-foreground">
-              User reported content
-            </p>
           </CardContent>
         </Card>
       </div>
@@ -129,16 +109,9 @@ export default function Dashboard() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {item.flagCount > 0 && (
-                      <Badge variant="destructive">
-                        {item.flagCount} flags
-                      </Badge>
-                    )}
-                    <Button asChild size="sm">
-                      <Link href={`/content?id=${item.id}`}>Review</Link>
-                    </Button>
-                  </div>
+                  <Button asChild size="sm">
+                    <Link href={`/content?id=${item.id}`}>Review</Link>
+                  </Button>
                 </div>
               );
             })}
