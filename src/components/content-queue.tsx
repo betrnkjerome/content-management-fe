@@ -392,8 +392,7 @@ export function ContentQueue() {
                   {filteredContent.map((item) => {
                     const TypeIcon = typeIcons[item.type];
                     const status = statusConfig[item.status];
-                    const isImage =
-                      item.type === "profile_picture" || item.type === "post";
+                    const isImage = item.type === "profile_picture";
 
                     return (
                       <TableRow key={item.id}>

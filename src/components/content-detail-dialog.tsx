@@ -185,7 +185,7 @@ export function ContentDetailDialog({
     setCustomReason("");
   };
 
-  const isImage = content.type === "profile_picture" || content.type === "post";
+  const isImage = content.type === "profile_picture";
 
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800", // "For Review"
